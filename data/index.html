@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DK Board</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <script>
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.svg" alt="DK Board Logo" class="logo">
+        </div>
+        <a onclick="showSection('dashboard')">
+            <span class="nav-icon">🏠</span> Dashboard
+        </a>
+        <a onclick="showSection('register')">
+            <span class="nav-icon">👤</span> User Registration
+        </a>
+        <a onclick="showSection('wifi-settings')">
+            <span class="nav-icon">📶</span> Add Wi-Fi Details
+        </a>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar-glass fs-10 navbar-top sticky-kit navbar navbar-expand navbar-light">
+        <div class="container-fluid">
+            <div class="navbar-items" style="display: flex; align-items: center; width: 100%;">
+                <!-- Notification Dropdown -->
+                <div class="notification-dropdown-container">
+                    <button class="nav-btn" id="notificationBtn" title="Notifications"
+                        style="background: none; border: none; margin-right: 20px;">
+                        <span class="nav-icon" style="font-size: 22px;">🔔</span>
+                    </button>
+                    <div id="notificationDropdown" class="notification-dropdown" style="display: none;">
+                        <!-- notification items -->
+                        <div class="notification-item"><strong>New user registered</strong><br><span>Just now</span>
+                        </div>
+                        <div class="notification-item"><strong>Password changed</strong><br><span>5 min ago</span>
+                        </div>
+                        <div class="notification-item"><strong>Wi-Fi updated</strong><br><span>10 min ago</span>
+                        </div>
+                        <div class="notification-item"><strong>Cart updated</strong><br><span>30 min ago</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cart Icon -->
+                <button class="nav-btn" title="Cart" style="background: none; border: none; margin-right: 20px;">
+                    <span class="nav-icon" style="font-size: 22px;">🛒</span>
+                </button>
+                <!-- Theme Dropdown -->
+                <div class="theme-dropdown-container">
+                    <button class="theme-toggle-btn" id="themeDropdownBtn" title="Theme">
+                        <span id="theme-icon">🌞</span>
+                    </button>
+                    <div class="theme-dropdown" id="themeDropdown" style="display: none;">
+                        <div class="theme-option" data-theme="light">🌞 Light</div>
+                        <div class="theme-option" data-theme="dark">🌙 Dark</div>
+                        <div class="theme-option" data-theme="auto">🖥️ Auto</div>
+                    </div>
+                </div>
+                <!-- Profile Image with Dropdown -->
+                <div class="profile-img-container" style="margin-left: 20px; margin-right: 32px; padding-right: 20px;">
+                    <img src="profile.png" alt="Profile" class="profile-img" id="profileImg" style="cursor:pointer;">
+                    <div id="profileDropdown" class="profile-dropdown"
+                        style="display: none; position: absolute; right: 0; top: 40px; min-width: 140px; background: #fff; border-radius: 8px; box-shadow: 0 4px 16px rgba(60,60,60,0.13); z-index: 1300;">
+                        <button id="logoutBtn"
+                            style="width: 100%; padding: 12px 0; border: none; background: none; color: #23272b; font-size: 16px; border-radius: 0 0 8px 8px; cursor: pointer;">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Menu Button -->
+    <button class="floating-menu-btn" onclick="toggleSidebar()">☰</button> <!-- Floating menu button -->
+
+    <div id="main">
+        <!-- Main Content Sections -->
+        <div id="content">
+            <h2>DK Board</h2>
+            <section id="dashboard" class="section">
+                <div class="esp32-status-cards">
+                    <div class="esp32-card">
+                        <div class="esp32-card-title">CPU Usage</div>
+                        <div class="esp32-card-value" id="cpu-usage">--%</div>
+                        <div class="esp32-card-desc">ESP32 Dual-core</div>
+                    </div>
+                    <div class="esp32-card">
+                        <div class="esp32-card-title">RAM Usage</div>
+                        <div class="esp32-card-value" id="ram-usage">-- KB / -- KB</div>
+                        <div class="esp32-card-desc">Heap Memory</div>
+                    </div>
+                    <div class="esp32-card">
+                        <div class="esp32-card-title">Storage</div>
+                        <div class="esp32-card-value" id="storage-usage">-- MB / -- MB</div>
+                        <div class="esp32-card-desc">Flash Storage</div>
+                    </div>
+
+                    <div class="esp32-card">
+                        <div class="esp32-card-title">PSRAM Usage</div>
+                        <div class="esp32-card-value" id="psram-usage">-- KB / -- KB</div>
+                        <div class="esp32-card-desc">PSRAM Memory</div>
+                    </div>
+                    <div class="esp32-card">
+                        <div class="esp32-card-title">SPI Storage</div>
+                        <div class="esp32-card-value" id="spi_ram_total">-- MB / -- MB</div>
+                        <div class="esp32-card-desc">SPI Storage</div>
+                    </div>
+                </div>
+                <!-- Temperature & Humidity Cards -->
+                <div class="cards">
+                    <div class="card temperature">
+                        <h4><span class="temp-icon">🌡️</span>TEMPERATURE</h4>
+                        <p><span class="reading"><span id="temperature">--</span> &deg;C</span></p>
+                        <p class="packet">Reading ID: <span id="rt1">--</span></p>
+                    </div>
+                    <div class="card humidity">
+                        <h4><span class="humidity-icon">💧</span>HUMIDITY</h4>
+                        <p><span class="reading"><span id="humidity">--</span> &percnt;</span></p>
+                        <p class="packet">Reading ID: <span id="rh1">--</span></p>
+                    </div>
+                    <div class="card temperature">
+                        <h4><span class="temp-icon">🌡️</span>PRESSURE</h4>
+                        <p><span class="reading"><span id="pressure">--</span> hPa</span></p>
+                        <p class="packet">Reading ID: <span id="rp1">--</span></p>
+                    </div>
+                    <div class="card humidity">
+                        <h4><span class="humidity-icon">💧</span>LIGHT - LDR</h4>
+                        <p><span class="reading"><span id="ldr">--</span> &percnt;</span></p>
+                        <p class="packet">Reading ID: <span id="rl1">--</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="register" class="section" style="display: none;">
+                <!-- User Management Tab -->
+                <div id="user-management" style="max-width:400px;margin:2em auto;">
+                    <h2>User Management</h2>
+                    <form id="userForm">
+                        <input type="text" id="username" placeholder="Username" required>
+                        <input type="password" id="password" placeholder="Password" required>
+                        <button type="submit">Add User</button>
+                    </form>
+                    <hr>
+                    <h3>Registered Users</h3>
+                    <ul id="userList"></ul>
+                </div>
+                <table id="userTable" border="1" style="width:100%;text-align:left;">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Users will be inserted here -->
+                    </tbody>
+                </table>
+                <!-- Modal for updating password -->
+                <div id="updateModal"
+                    style="display:none;position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);padding:1em;border:1px solid #ccc;z-index:2000;">
+                    <h3>Update Password</h3>
+                    <input type="text" id="modalUsername" readonly>
+                    <input type="password" id="modalPassword" placeholder="New Password">
+                    <button id="modalSaveBtn">Save</button>
+                    <button onclick="document.getElementById('updateModal').style.display='none'">Cancel</button>
+                </div>
+            </section>
+
+            <section id="wifi-settings" class="section" style="display: none;">
+                <h3>Wi-Fi Configuration</h3>
+                <form id="wifiForm">
+                    <input type="text" id="ssid" placeholder="SSID" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <button type="submit">Save Credentials</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

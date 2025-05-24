@@ -1,0 +1,778 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    transition: 0.3s;
+    margin: 0%;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Floating Menu Button */
+.floating-menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    font-size: 15px;
+    background: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 0px;
+    z-index: 2301; /* Above sidebar and navbar */
+    transition: background 0.3s, color 0.3s;
+    display: block;
+}
+
+.floating-menu-btn.dark-mode {
+    background: #23272b;
+    color: #f1f1f1;
+}
+
+.sidebar:not(.hidden) ~ #main .floating-menu-btn {
+    display: none;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    background: rgba(255,255,255,0.85); /* Match navbar in light mode */
+    color: #23272b;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-left: 20px;
+    transition: background 0.3s, color 0.3s;
+}
+body.dark-mode .theme-toggle-btn {
+    background: rgba(35,39,43,0.95); /* Match navbar in dark mode */
+    color: #f1f1f1;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: black;
+    color: white;
+    z-index: 2301; /* Higher than navbar */
+    transition: width 0.3s;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.sidebar.hidden {
+    width: 50px;
+    z-index: 2301;
+}
+
+.sidebar.dark-mode {
+    background: #23272b;
+    color: #f1f1f1;
+}
+
+/* Sidebar header */
+.sidebar-header {
+    text-align: center;
+    padding: 10px;
+}
+
+/* Logo */
+.logo {
+    width: 100px;
+    height: auto;
+    padding: 5px 5px 25px 5px;
+}
+
+/* Sidebar Links */
+.sidebar a {
+    display: block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar.hidden a:first-of-type {
+    margin-top: 60px; /* Adjust as needed for desired spacing */
+}
+
+.sidebar a:hover {
+    background: rgba(135, 138, 138, 0.137);
+}
+
+.sidebar.dark-mode a {
+    color: #f1f1f1;
+}
+
+.sidebar.dark-mode a:hover {
+    background: rgba(255,255,255,0.07);
+}
+
+/* Main Content */
+#main {
+    margin-left: 260px;
+    transition: margin-left 0.3s, width 0.3s;
+}
+
+#main.expanded {
+    margin-left: 50px;
+    width: calc(100vw - 50px);
+}
+
+/* If you want to center content vertically as well (optional): */
+#content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* Center horizontally */
+    justify-content: center;  /* Center vertically if you want */
+}
+
+#main.dark-mode {
+    background: #18191a;
+    color: #f1f1f1;
+}
+
+/* Hide Sidebar */
+.sidebar.hidden {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px; /* Add some top padding */
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 2000;
+}
+
+/* When sidebar is hidden, stack nav items vertically and center */
+.sidebar.hidden a {
+    text-align: center;
+    padding: 18px 0;
+    font-size: 0; /* Hide text */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Only show icons */
+.sidebar.hidden a .nav-icon {
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 0;
+}
+
+/* Adjust floating menu button when sidebar is hidden */
+.sidebar.hidden ~ .floating-menu-btn {
+    left: 10px;
+    top: 20px;
+}
+
+/* Optional: add spacing between floating button and first nav item */
+.sidebar.hidden a:first-of-type {
+    margin-top: 60px;
+}
+
+.sidebar.hidden .logo,
+.sidebar.hidden h2 {
+    display: none;
+}
+
+.sidebar.hidden a {
+    width: 100%;
+}
+
+/* Night Mode (Dark Theme) */
+body.dark-mode {
+    background: #18191a;
+    color: #f1f1f1;
+}
+
+.sidebar.dark-mode {
+    background: #23272b;
+    color: #f1f1f1;
+}
+
+#main.dark-mode {
+    background: #18191a;
+    color: #f1f1f1;
+}
+
+.theme-toggle-btn.dark-mode {
+    background: #f1f1f1;
+    color: #23272b;
+}
+
+.floating-menu-btn.dark-mode {
+    background: #23272b;
+    color: #f1f1f1;
+}
+
+/* Navigation Icon */
+.nav-icon {
+    margin-right: 10px;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+/* Top Navbar */
+.navbar-glass.fs-10.navbar-top.sticky-kit.navbar.navbar-expand.navbar-light {
+    z-index: 1200; /* Lower than sidebar */
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-width: 0;
+    border-radius: 0;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+    min-height: 56px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #23272b;
+    transition: background 0.3s, color 0.3s;
+    /* Remove overflow-x: auto or hidden! */
+    overflow: visible;
+}
+
+body.dark-mode .navbar-glass.fs-10.navbar-top.sticky-kit.navbar.navbar-expand.navbar-light {
+    background: rgba(35,39,43,0.95);
+    color: #f1f1f1;
+}
+
+.navbar-glass .nav-icon {
+    font-size: 22px;
+    color: #222;
+    vertical-align: middle;
+    transition: color 0.3s;
+}
+
+body.dark-mode .navbar-glass .nav-icon {
+    color: #f1f1f1;
+}
+
+/* Ensure navbar items are horizontal and aligned */
+.navbar-items {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0px; /* Remove if you want spacing between items */
+    margin-right: 30px; /* Adjust as needed */
+}
+
+/* Remove extra margin from last item if needed */
+.navbar-items > *:last-child {
+    margin-right: 0 !important;
+}
+
+/* Ensure dropdown containers are relative for absolute dropdowns */
+.notification-dropdown-container,
+.theme-dropdown-container,
+.profile-img-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdowns absolute to their container */
+.notification-dropdown,
+.theme-dropdown,
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    z-index: 1300;
+    display: none;
+}
+
+/* Profile image alignment */
+.profile-img {
+    vertical-align: middle;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* Dropdown containers should be relative */
+.notification-dropdown-container,
+.theme-dropdown-container,
+.profile-img-container {
+    position: relative;
+}
+
+/* Dropdowns should be absolute and high z-index */
+.notification-dropdown,
+.theme-dropdown,
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    z-index: 1300;
+    display: none;
+}
+
+/* Profile image */
+.profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+    transition: border 0.3s;
+}
+
+body.dark-mode .profile-img {
+    border: 2px solid #444;
+}
+
+.profile-img-container {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 32px; /* Increased margin for more space from right edge */
+}
+
+/* Notification Dropdown */
+.notification-dropdown-container {
+    position: relative;
+}
+
+.notification-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #fff;
+    color: #23272b;
+    min-width: 220px;
+    box-shadow: 0 4px 16px rgba(60,60,60,0.13);
+    border-radius: 8px;
+    z-index: 1300;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+body.dark-mode .notification-dropdown {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+
+.notification-item {
+    padding: 10px 18px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+.notification-item:last-child {
+    border-bottom: none;
+}
+body.dark-mode .notification-item {
+    border-bottom: 1px solid #444;
+}
+.notification-item span {
+    font-size: 12px;
+    color: #888;
+}
+body.dark-mode .notification-item span {
+    color: #bbb;
+}
+
+/* Theme Dropdown */
+.theme-dropdown-container {
+    position: relative;
+}
+
+.theme-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #fff;
+    color: #23272b;
+    min-width: 120px;
+    box-shadow: 0 4px 16px rgba(60,60,60,0.13);
+    border-radius: 8px;
+    z-index: 1300;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+body.dark-mode .theme-dropdown {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+
+.theme-option {
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.theme-option:hover {
+    background: #f0f0f0;
+}
+body.dark-mode .theme-option:hover {
+    background: #333;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    min-width: 140px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(60,60,60,0.13);
+    z-index: 1300;
+    padding: 0;
+    display: none;
+}
+body.dark-mode .profile-dropdown {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+.profile-dropdown button {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 16px;
+    border-radius: 0 0 8px 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.profile-dropdown button:hover {
+    background: #f0f0f0;
+}
+body.dark-mode .profile-dropdown button:hover {
+    background: #333;
+}
+
+/* ESP32 Status Cards */
+.esp32-status-cards {
+    display: flex;
+    gap: 24px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.esp32-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+    padding: 24px 32px;
+    min-width: 180px;
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: background 0.3s, color 0.3s;
+}
+.esp32-card-title {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 8px;
+}
+.esp32-card-value {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #23272b;
+}
+.esp32-card-desc {
+    font-size: 13px;
+    color: #aaa;
+}
+body.dark-mode .esp32-card {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+body.dark-mode .esp32-card-title {
+    color: #bbb;
+}
+body.dark-mode .esp32-card-value {
+    color: #fff;
+}
+body.dark-mode .esp32-card-desc {
+    color: #888;
+}
+
+/* Dashboard Cards Layout */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 32px;
+    justify-content: flex-start;
+}
+
+/* Card Style */
+.card {
+    flex: 1 1 220px;
+    min-width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+    padding: 20px;
+    margin-bottom: 0;
+    transition: background 0.3s, color 0.3s;
+}
+
+.card h4 {
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.temp-icon {
+    color: #e67e22;
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+.humidity-icon {
+    color: #3498db;
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+
+.reading {
+    font-size: 2em;
+    font-weight: 500;
+}
+
+.packet {
+    color: #888;
+    font-size: 0.98em;
+    margin-top: 8px;
+}
+
+body.dark-mode .card {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+body.dark-mode .packet {
+    color: #aaa;
+}
+
+/* Form Section Styling */
+.section form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 350px;
+    margin: 24px 0;
+    background: #fff;
+    padding: 28px 24px 24px 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+    transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode .section form {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* Input Fields */
+.section input[type="text"],
+.section input[type="password"] {
+    padding: 12px 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #f8fafc;
+    color: #23272b;
+    transition: border 0.2s, background 0.3s, color 0.3s;
+    outline: none;
+}
+
+.section input[type="text"]:focus,
+.section input[type="password"]:focus {
+    border-color: #007bff;
+    background: #fff;
+}
+
+body.dark-mode .section input[type="text"],
+body.dark-mode .section input[type="password"] {
+    background: #23272b;
+    color: #f1f1f1;
+    border: 1.5px solid #444;
+}
+
+body.dark-mode .section input[type="text"]:focus,
+body.dark-mode .section input[type="password"]:focus {
+    border-color: #66aaff;
+    background: #18191a;
+}
+
+/* Form Buttons */
+.section button[type="submit"] {
+    padding: 12px 0;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+.section button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+body.dark-mode .section button[type="submit"] {
+    background: #3388ff;
+    color: #fff;
+}
+
+body.dark-mode .section button[type="submit"]:hover {
+    background: #2366bb;
+}
+
+/* Center login page content */
+body.login-page, .login-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Login form themed styling */
+#login.section form {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 350px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 32px 28px 28px 28px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+    transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode #login.section form {
+    background: #23272b;
+    color: #f1f1f1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+#login.section input[type="text"],
+#login.section input[type="password"] {
+    width: 100%;
+        box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #f8fafc;
+    color: #23272b;
+    transition: border 0.2s, background 0.3s, color 0.3s;
+    outline: none;
+}
+
+#login.section input[type="text"]:focus,
+#login.section input[type="password"]:focus {
+    border-color: #007bff;
+    background: #fff;
+}
+
+body.dark-mode #login.section input[type="text"],
+body.dark-mode #login.section input[type="password"] {
+    background: #23272b;
+    color: #f1f1f1;
+    border: 1.5px solid #444;
+}
+
+body.dark-mode #login.section input[type="text"]:focus,
+body.dark-mode #login.section input[type="password"]:focus {
+    border-color: #66aaff;
+    background: #18191a;
+}
+
+#login.section button[type="submit"] {
+    width: 100%;
+        box-sizing: border-box;
+    padding: 12px 0;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+#login.section button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+body.dark-mode #login.section button[type="submit"] {
+    background: #3388ff;
+    color: #fff;
+}
+
+body.dark-mode #login.section button[type="submit"]:hover {
+    background: #2366bb;
+}
+
+#updateModal {
+    background: #f9f9f9;
+    color: #23272b;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(60, 60, 60, 0.13);
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1em;
+    z-index: 2000;
+}
+
+body.dark-mode #updateModal {
+    background: #23272b;
+    color: #f1f1f1;
+    border: 1px solid #444;
+}

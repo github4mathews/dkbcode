@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" width="1210" height="337" viewBox="0 0 1210 337">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        font-size: 336px;
+      }
+
+      .cls-2, .cls-4 {
+        fill: #fff;
+        text-anchor: middle;
+        font-family: "Orbitron";
+      }
+
+      .cls-3, .cls-4 {
+        font-size: 36px;
+      }
+    </style>
+  </defs>
+  <text x="600" y="259" class="cls-1"><tspan x="600" class="cls-2">ngcrat</tspan></text>
+  <text x="836" y="328" class="cls-3"><tspan x="836" class="cls-4">Pioneering Next-Gen Robotic Minds</tspan></text>
+</svg>
