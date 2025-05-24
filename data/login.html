@@ -9,17 +9,17 @@
 </head>
 
 <body class="login-page">
-    <div id="login-section" style="max-width:350px;margin:5em auto;">
+    <div id="login-section">
         <h2>Login</h2>
-        <form id="loginForm">
-            <input type="text" id="loginUsername" placeholder="Username" required>
+        <form id="loginForm" autocomplete="on">
+            <input type="text" id="loginUsername" placeholder="Username" required autofocus>
             <input type="password" id="loginPassword" placeholder="Password" required>
-            <label style="display:block;margin:8px 0;">
+            <label>
                 <input type="checkbox" id="rememberMe"> Remember me
             </label>
             <button type="submit">Login</button>
         </form>
-        <div id="loginError" style="color:red;display:none;margin-top:10px;">Invalid username or password!</div>
+        <div id="loginError">Invalid username or password!</div>
     </div>
 </body>
 

@@ -657,81 +657,65 @@ body.dark-mode .section button[type="submit"]:hover {
 }
 
 /* Center login page content */
-body.login-page, .login-container {
+body.login-page {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    background: var(--bg, #f4f6fa);
+    transition: background 0.3s;
+}
+body.login-page.dark-mode {
+    --bg: #18191a;
+    background: var(--bg, #18191a);
 }
 
-.login-container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Login form themed styling */
-#login.section form {
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    max-width: 350px;
-    margin: 0 auto;
+/* Login section card */
+#login-section {
     background: #fff;
-    padding: 32px 28px 28px 28px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(60,60,60,0.07);
-    transition: background 0.3s, color 0.3s;
+    box-shadow: 0 4px 24px rgba(60,60,60,0.13);
+    padding: 2.5em 2em 2em 2em;
+    width: 100%;
+    max-width: 350px;
+    color: #23272b;
 }
-
-body.dark-mode #login.section form {
+body.login-page.dark-mode #login-section {
     background: #23272b;
     color: #f1f1f1;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.33);
 }
-
-#login.section input[type="text"],
-#login.section input[type="password"] {
+#login-section h2 {
+    margin-bottom: 1.2em;
+    text-align: center;
+}
+#loginForm input[type="text"],
+#loginForm input[type="password"] {
     width: 100%;
-        box-sizing: border-box;
-    padding: 12px 14px;
-    border: 1.5px solid #d1d5db;
+    padding: 12px;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-    background: #f8fafc;
+    background: #f9f9f9;
     color: #23272b;
-    transition: border 0.2s, background 0.3s, color 0.3s;
-    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
 }
-
-#login.section input[type="text"]:focus,
-#login.section input[type="password"]:focus {
-    border-color: #007bff;
-    background: #fff;
-}
-
-body.dark-mode #login.section input[type="text"],
-body.dark-mode #login.section input[type="password"] {
-    background: #23272b;
-    color: #f1f1f1;
-    border: 1.5px solid #444;
-}
-
-body.dark-mode #login.section input[type="text"]:focus,
-body.dark-mode #login.section input[type="password"]:focus {
-    border-color: #66aaff;
+body.login-page.dark-mode #loginForm input[type="text"],
+body.login-page.dark-mode #loginForm input[type="password"] {
     background: #18191a;
+    color: #f1f1f1;
+    border: 1px solid #444;
 }
-
-#login.section button[type="submit"] {
+#loginForm label {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    margin-bottom: 1em;
+}
+#loginForm button[type="submit"] {
     width: 100%;
-        box-sizing: border-box;
     padding: 12px 0;
     background: #007bff;
     color: #fff;
@@ -741,20 +725,22 @@ body.dark-mode #login.section input[type="password"]:focus {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: 8px;
 }
-
-#login.section button[type="submit"]:hover {
+#loginForm button[type="submit"]:hover {
     background: #0056b3;
 }
-
-body.dark-mode #login.section button[type="submit"] {
+body.login-page.dark-mode #loginForm button[type="submit"] {
     background: #3388ff;
     color: #fff;
 }
-
-body.dark-mode #login.section button[type="submit"]:hover {
+body.login-page.dark-mode #loginForm button[type="submit"]:hover {
     background: #2366bb;
+}
+#loginError {
+    color: #e74c3c;
+    margin-top: 1em;
+    text-align: center;
+    display: none;
 }
 
 #updateModal {

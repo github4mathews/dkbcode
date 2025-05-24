@@ -5,9 +5,7 @@
     "SCHEMA": "BOOL",
     "MODE": 1,
     "AP_NAME": "BIOT_GW",
-    "CHANNEL": 5,
-    "DEFAULT_USER_NAME": "admin",
-    "DEFAULT_PASSWORD": "admin"
+    "CHANNEL": 5
   },
   "USERS": [
   { "USER_NAME": "admin", "PASSWORD": "admin" },
