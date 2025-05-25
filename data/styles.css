@@ -762,3 +762,193 @@ body.dark-mode #updateModal {
     color: #f1f1f1;
     border: 1px solid #444;
 }
+
+#known-wifi-list ul {
+    list-style: disc inside;
+    margin: 0 0 1em 0;
+    padding: 0 0 0 1em;
+}
+
+#known-wifi-list li {
+    margin-bottom: 2px;
+}
+
+#mqttForm {
+    width: 100%;
+    max-width: none;
+}
+
+#mqtt-settings table td {
+    padding: 0 8px;
+    vertical-align: middle;
+}
+
+#mqtt-settings input[type="text"],
+#mqtt-settings input[type="password"],
+#mqtt-settings input[type="number"],
+#mqtt-settings textarea {
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 15px;
+    background: #f9f9f9;
+    color: #23272b;
+    transition: border 0.2s;
+}
+
+body.dark-mode #mqtt-settings input,
+body.dark-mode #mqtt-settings textarea {
+    background: #18191a;
+    color: #f1f1f1;
+    border: 1px solid #444;
+}
+
+#mqtt-settings button[type="submit"] {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#mqtt-settings button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* DKBoard Title */
+.dkboard-title h2 {
+    margin-left: 280px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #23272b;
+    text-align: left;
+    white-space: nowrap;
+    transition: margin-left 0.3s,
+        color 0.3s;
+}
+
+/* DKBoard Title - dark theme */
+body.dark-mode .dkboard-title h2 {
+    color: #f1f1f1;
+    /* White for dark theme */
+}
+
+.container-fluid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Push children to far left and right */
+    width: 100%;
+    height: 20px;
+}
+.dkboard-title {
+    display: flex;
+    align-items: center;
+}
+.navbar-items {
+    display: flex;
+    align-items: center;
+    margin-right: 24px; /* Space between items and DK Board title */
+    flex-direction:row; /* Align items to the right */
+    justify-content: flex-end;
+}
+
+body.sidebar-collapsed .dkboard-title h2 {
+    margin-left: 50px;
+}
+
+/* File Manager Section */
+#file-manager {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 2em;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+}
+
+#file-manager h3 {
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #007bff;
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+/* Toolbar */
+.file-manager-toolbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5em;
+}
+
+.file-manager-toolbar button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.file-manager-toolbar button:hover {
+    background: #0056b3;
+}
+
+/* File Grid */
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+/* File/Folder Item */
+.file-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(60, 60, 60, 0.06);
+    transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
+}
+
+.file-item:hover {
+    background: #e3f0ff;
+    transform: translateY(-2px);
+}
+
+.file-item img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+}
+
+.file-item span {
+    font-size: 0.9em;
+    color: #23272b;
+    word-wrap: break-word;
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+    .file-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}

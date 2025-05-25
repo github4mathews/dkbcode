@@ -17,18 +17,24 @@ function setTheme(theme) {
     applyTheme(theme);
 }
 
-let expandSideNav = false;
-// Sidebar toggle function
+// let expandSideNav = false;
+// // Sidebar toggle function
+// function toggleSidebar() {
+//     const sidebar = document.getElementById('sidebar');
+//     const main = document.getElementById('main');
+//     if (sidebar && main) {
+//         sidebar.classList.toggle('hidden');
+//         main.classList.toggle('expanded');
+//         if (!expandSideNav) {
+//             expandSideNav = !expandSideNav;
+//         }
+//     }
+// }
+
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    const main = document.getElementById('main');
-    if (sidebar && main) {
-        sidebar.classList.toggle('hidden');
-        main.classList.toggle('expanded');
-        if (!expandSideNav) {
-            expandSideNav = !expandSideNav;
-        }
-    }
+    sidebar.classList.toggle('hidden');
+    document.body.classList.toggle('sidebar-collapsed', sidebar.classList.contains('hidden'));
 }
 
 // Cookie helpers
@@ -82,6 +88,131 @@ function attemptLogin(username, password, remember) {
         });
 }
 
+// Scan for Wi-Fi networks and populate dropdown
+function scanWifi() {
+    const statusDiv = document.getElementById('wifi-scan-status');
+    statusDiv.textContent = "Scanning for Wi-Fi networks...";
+    fetch('/wifi/scan/start')
+        .then(() => pollWifiScan());
+}
+
+function pollWifiScan() {
+    fetch('/wifi/scan')
+        .then(res => res.json())
+        .then(networks => {
+            const statusDiv = document.getElementById('wifi-scan-status');
+            if (Array.isArray(networks)) {
+                statusDiv.textContent = `Found ${networks.length} network(s).`;
+                const select = document.getElementById('ssid');
+                select.innerHTML = '';
+                networks.forEach(net => {
+                    const option = document.createElement('option');
+                    option.value = net.ssid;
+                    option.textContent = `${net.ssid} (${net.rssi} dBm)${net.secure ? ' 🔒' : ''}`;
+                    select.appendChild(option);
+                });
+            } else if (networks.status === "scanning") {
+                statusDiv.textContent = "Scanning for Wi-Fi networks...";
+                setTimeout(pollWifiScan, 1000); // poll again in 1s
+            } else {
+                statusDiv.textContent = "No networks found.";
+            }
+        })
+        .catch(() => {
+            document.getElementById('wifi-scan-status').textContent = "Failed to scan Wi-Fi networks.";
+        });
+}
+
+function showCurrentWifi() {
+    fetch('/wifi/info')
+        .then(res => res.json())
+        .then(info => {
+            const ssid = info.SSID ? info.SSID : 'Not set';
+            document.getElementById('current-wifi').textContent = `Currently connected to: ${ssid}`;
+        })
+        .catch(() => {
+            document.getElementById('current-wifi').textContent = 'Wi-Fi info not available';
+        });
+}
+
+function showKnownWifi() {
+    fetch('/wifi/known')
+        .then(res => res.json())
+        .then(list => {
+            const div = document.getElementById('known-wifi-list');
+            if (!Array.isArray(list) || list.length === 0) {
+                div.innerHTML = "<em>No known Wi-Fi networks saved.</em>";
+                return;
+            }
+            div.innerHTML = "<b>Known Wi-Fi Networks:</b><ul>" +
+                list.map(net => `<li>${net.SSID}</li>`).join('') + "</ul>";
+        });
+}
+
+function showMqttSettings() {
+    fetch('/mqtt/info')
+        .then(res => res.json())
+        .then(info => {
+            document.getElementById('mqttServer').value = info.MQTT_SERVER || '';
+            document.getElementById('mqttUsername').value = info.DEFAULT_USERNAME || '';
+            document.getElementById('mqttPassword').value = info.DEFAULT_PWD || '';
+            document.getElementById('mqttClientId').value = info.ACL_CLIENT_ID || '';
+            document.getElementById('mqttPort').value = info.MQ_PORT || '';
+            document.getElementById('mqttWsPort').value = info.WS_PORT || '';
+            document.getElementById('mqttPublishTopic').value = (info.PUBLISH_TOPIC || []).join(',');
+            document.getElementById('mqttSubscribeTopic').value = (info.SUBSCRIBE_TOPIC || []).join(',');
+            document.getElementById('mqttServerCert').value = info.SERVER_CERTIFICATE || '';
+        });
+}
+
+function showFileManager() {
+    fetch('/file/list')
+        .then(res => res.json())
+        .then(files => {
+            const fileGrid = document.getElementById('fileGrid');
+            fileGrid.innerHTML = ''; // Clear existing files
+            files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <img src="${file.isFolder ? 'folder-icon.png' : 'file-icon.png'}" alt="${file.name}">
+                    <span>${file.name}</span>
+                `;
+                fileItem.onclick = () => {
+                    if (file.isFolder) {
+                        // Navigate to folder
+                        console.log('Open folder:', file.name);
+                    } else {
+                        // Download file
+                        window.location.href = `/file?name=${encodeURIComponent(file.name)}`;
+                    }
+                };
+                fileGrid.appendChild(fileItem);
+            });
+        });
+}
+
+function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    fileInput.click();
+}
+
+function handleFileUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    fetch('/file', { method: 'POST', body: formData })
+        .then(() => showFileManager());
+}
+
+function createFolder() {
+    const folderName = prompt('Enter folder name:');
+    if (!folderName) return;
+    fetch(`/file?name=${encodeURIComponent(folderName)}`, { method: 'POST' })
+        .then(() => showFileManager());
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     // Redirect logic for index.html
     if (
@@ -121,24 +252,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedTheme = localStorage.getItem('theme') || 'auto';
     applyTheme(savedTheme);
 
-    // // Login page logic
-    // const loginForm = document.getElementById('loginForm');
-    // if (loginForm) {
-    //     loginForm.addEventListener('submit', function (event) {
-    //         event.preventDefault();
-    //         const username = document.getElementById('loginUsername').value;
-    //         const password = document.getElementById('loginPassword').value;
-    //         if (username === 'root' && password === 'toor') {
-    //             localStorage.setItem('isLoggedIn', 'true');
-    //             window.location.href = 'index.html';
-    //         } else {
-    //             const loginError = document.getElementById('loginError');
-    //             if (loginError) loginError.style.display = 'block';
-    //         }
-    //     });
-    //     return; // Stop further script execution on login page
-    // }
-
     // The following code is only for index.html/dashboard pages
     // Sidebar toggle function
     if (document.getElementById("sidebar")) {
@@ -160,6 +273,67 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Wi-Fi credentials saved!");
         });
     }
+
+    const wifiFormEl = document.getElementById('wifiForm');
+    if (wifiFormEl) {
+        wifiFormEl.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const ssid = document.getElementById('ssid').value;
+            const password = document.getElementById('wifiPassword').value;
+            fetch('/wifi/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `ssid=${encodeURIComponent(ssid)}&password=${encodeURIComponent(password)}`
+            })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.status === 'success' ? 'Wi-Fi credentials saved!' : 'Failed to save Wi-Fi!');
+                });
+        });
+    }
+
+    const mqttForm = document.getElementById('mqttForm');
+    if (mqttForm) {
+        mqttForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const data = {
+                server: document.getElementById('mqttServer').value,
+                username: document.getElementById('mqttUsername').value,
+                password: document.getElementById('mqttPassword').value,
+                clientId: document.getElementById('mqttClientId').value,
+                port: parseInt(document.getElementById('mqttPort').value, 10),
+                wsPort: parseInt(document.getElementById('mqttWsPort').value, 10),
+                publishTopic: document.getElementById('mqttPublishTopic').value.split(',').map(s => s.trim()).filter(s => s),
+                subscribeTopic: document.getElementById('mqttSubscribeTopic').value.split(',').map(s => s.trim()).filter(s => s),
+                serverCert: document.getElementById('mqttServerCert').value
+            };
+            fetch('/mqtt/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(resp => {
+                    document.getElementById('mqtt-save-status').textContent =
+                        resp.status === 'success' ? 'MQTT settings saved!' : 'Failed to save!';
+                });
+        });
+    }
+
+
+    window.showSection = function (sectionId) {
+        document.querySelectorAll('.section').forEach(section => section.style.display = "none");
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.style.display = "block";
+            if (sectionId === 'wifi-settings') {
+                showCurrentWifi();
+                showKnownWifi();
+                scanWifi();
+            }
+            else if (sectionId === 'mqtt-settings') showMqttSettings();
+        }
+    };
 
     // Notification dropdown logic
     const notificationBtn = document.getElementById('notificationBtn');
@@ -245,6 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         }
     }
+
     if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '/index') {
         // setInterval(updateESP32Status, 5000);
         // updateESP32Status();

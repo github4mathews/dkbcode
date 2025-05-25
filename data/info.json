@@ -12,8 +12,11 @@
   { "USER_NAME": "user2", "PASSWORD": "pass2" }
   ],
   "WIFI": {
-    "SSID": "SHIMBAT_AMPIO_2.4G",
-    "PWD": "ampio@123"
+    "CURRENT": { "SSID": "FFTH-4A06", "PWD": "12345678" },
+    "KNOWN": [
+      { "SSID": "SHIMBAT_AMPIO_2.4G", "PWD": "ampio@123" },
+      { "SSID": "FFTH-4A06", "PWD": "12345678" }
+    ]
   },
   "MQTT": {
     "MQTT_SERVER": "v1b82961.ala.us-east-1.emqxsl.com",

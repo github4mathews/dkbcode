@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ESP File Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="fmstyles.css">
+</head>
+
+<body>
+    <div class="drive-container">
+        <div class="toolbar">
+            <button onclick="createFolder()">New Folder</button>
+            <button onclick="uploadFile()">Upload File</button>
+            <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(this)">
+        </div>
+        <div id="fileGrid" class="file-grid"></div>
+    </div>
+
+    <!-- File Editor Modal -->
+    <div id="editorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditor()">&times;</span>
+            <h3>Edit File: <span id="editorFilename"></span></h3>
+            <textarea id="editorArea"></textarea>
+            <button onclick="saveEdit()">Save</button>
+        </div>
+    </div>
+
+    <script src="fmscript.js"></script>
+</body>
+
+</html>

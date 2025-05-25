@@ -29,12 +29,22 @@
         <a onclick="showSection('wifi-settings')">
             <span class="nav-icon">📶</span> Add Wi-Fi Details
         </a>
+        <a onclick="showSection('mqtt-settings')">
+            <span class="nav-icon">🔗</span> Add MQTT Details
+        </a>
+        <a onclick="showSection('file-manager'); showFileManager();">
+            <span class="nav-icon">📁</span> File Manager
+        </a>
     </div>
 
     <!-- Top Navbar -->
     <nav class="navbar-glass fs-10 navbar-top sticky-kit navbar navbar-expand navbar-light">
-        <div class="container-fluid">
-            <div class="navbar-items" style="display: flex; align-items: center; width: 100%;">
+        <div class="container-fluid"
+            style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+            <div class="dkboard-title">
+                <h2>DK Board</h2>
+            </div>
+            <div class="navbar-items" style="display: flex; align-items: center;">
                 <!-- Notification Dropdown -->
                 <div class="notification-dropdown-container">
                     <button class="nav-btn" id="notificationBtn" title="Notifications"
@@ -87,7 +97,7 @@
     <div id="main">
         <!-- Main Content Sections -->
         <div id="content">
-            <h2>DK Board</h2>
+
             <section id="dashboard" class="section">
                 <div class="esp32-status-cards">
                     <div class="esp32-card">
@@ -180,11 +190,86 @@
 
             <section id="wifi-settings" class="section" style="display: none;">
                 <h3>Wi-Fi Configuration</h3>
+                <div id="current-wifi" style="margin-bottom:10px;color:#007bff;"></div>
+                <div id="known-wifi-list"></div>
                 <form id="wifiForm">
-                    <input type="text" id="ssid" placeholder="SSID" required>
-                    <input type="password" id="password" placeholder="Password" required>
-                    <button type="submit">Save Credentials</button>
+                    <select id="ssid" required></select>
+                    <input type="password" id="wifiPassword" placeholder="Wi-Fi Password" required>
+                    <button type="submit">Save Wi-Fi</button>
                 </form>
+                <button type="button" onclick="scanWifi()">Scan Networks</button>
+                <!-- Add this inside your Wi-Fi settings section, above or below the SSID select -->
+                <div id="wifi-scan-status" style="margin:10px 0; color:#007bff;"></div>
+            </section>
+
+            <section id="mqtt-settings" class="section" style="display:none; max-width: 500px; margin: 2em auto;">
+                <h3 style="text-align:center;">MQTT Configuration</h3>
+                <form id="mqttForm">
+                    <table style="width:100%; border-collapse:separate; border-spacing:0 16px;table-layout:fixed;">
+                        <colgroup>
+                            <col style="width: 25%;">
+                            <col style="width: 75%;">
+                        </colgroup>
+                        <tr>
+                            <td style="width: 160px;"><label for="mqttServer">Server:</label></td>
+                            <td><input type="text" id="mqttServer" required style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttUsername">Username:</label></td>
+                            <td><input type="text" id="mqttUsername" required style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttPassword">Password:</label></td>
+                            <td><input type="password" id="mqttPassword" required style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttClientId">Client ID:</label></td>
+                            <td><input type="text" id="mqttClientId" required style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttPort">MQTT Port:</label></td>
+                            <td><input type="number" id="mqttPort" required style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttWsPort">WebSocket Port:</label></td>
+                            <td><input type="number" id="mqttWsPort" required style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttPublishTopic">Publish Topic(s):</label></td>
+                            <td><input type="text" id="mqttPublishTopic" placeholder="Comma separated"
+                                    style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mqttSubscribeTopic">Subscribe Topic(s):</label></td>
+                            <td><input type="text" id="mqttSubscribeTopic" placeholder="Comma separated"
+                                    style="width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><label for="mqttServerCert">Server Certificate:</label></td>
+                            <td><textarea id="mqttServerCert" rows="18" style="width:100%; resize:vertical;"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:center;">
+                                <button type="submit" style="width:60%;padding:12px 0;">Save MQTT Settings</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div id="mqtt-save-status" style="margin-top:16px;text-align:center;"></div>
+            </section>
+
+            <!-- File Manager Section -->
+            <section id="file-manager" class="section" style="display:none;">
+                <h3>File Manager</h3>
+                <div class="file-manager-toolbar">
+                    <button onclick="createFolder()">Create Folder</button>
+                    <button onclick="uploadFile()">Upload File</button>
+                    <input type="file" id="fileInput" style="display:none;" onchange="handleFileUpload(this)">
+                </div>
+                <div id="fileGrid" class="file-grid">
+                    <!-- Files and folders will be dynamically added here -->
+                </div>
             </section>
         </div>
     </div>
