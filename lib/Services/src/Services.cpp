@@ -1,6 +1,6 @@
-#include "spiffsServices.h"
+#include "Services.h"
 
-void SpiffsServices::ConfigFile_Save_Variable(String From, String VarName, String VarValue, UtlityServices utlityService)
+void Services::ConfigFile_Save_Variable(String From, String VarName, String VarValue, UtilServices utilServices)
 {
     Serial.print("ConfigFile_Save_Variable: ");
     Serial.print(VarName);
@@ -19,7 +19,7 @@ void SpiffsServices::ConfigFile_Save_Variable(String From, String VarName, Strin
     {
         DynamicJsonDocument doc(2048);
         deserializeJson(doc, configFile);
-        utlityService.printLine(" OLD info.json ");
+        utilServices.printLine(" OLD info.json ");
         serializeJsonPretty(doc, Serial);
         configFile.close();
 
@@ -33,7 +33,7 @@ void SpiffsServices::ConfigFile_Save_Variable(String From, String VarName, Strin
 
         configFile = SPIFFS.open("/info.json", "w");
         serializeJson(doc, configFile);
-        utlityService.printLine(" NEW info.json ");
+        utilServices.printLine(" NEW info.json ");
         serializeJsonPretty(doc, Serial);
         configFile.close();
         Serial.println("");
@@ -41,7 +41,7 @@ void SpiffsServices::ConfigFile_Save_Variable(String From, String VarName, Strin
     }
 }
 
-void SpiffsServices::updateReciverListIfNotFound(String ListName, String mac, String &infojsonAsString, bool EnableDebug, UtlityServices utlityService)
+void Services::updateReciverListIfNotFound(String ListName, String mac, String &infojsonAsString, bool EnableDebug, UtilServices utilServices)
 {
     DynamicJsonDocument infojson(1024);
     deserializeJson(infojson, infojsonAsString);
@@ -61,10 +61,10 @@ void SpiffsServices::updateReciverListIfNotFound(String ListName, String mac, St
             Serial.println(mac + " already found.");
     }
     else
-        ConfigFile_Save_Variable("URL", ListName, mac, utlityService);
+        ConfigFile_Save_Variable("URL", ListName, mac, utilServices);
 }
 
-bool SpiffsServices::getDeviceData(String &infojson, UtlityServices utlityServices, String filePath = "/info.json")
+bool Services::getDeviceData(String &infojson, UtilServices utilServices, String filePath = "/info.json")
 {
     DynamicJsonDocument infojson1(1024);
 
@@ -85,7 +85,7 @@ bool SpiffsServices::getDeviceData(String &infojson, UtlityServices utlityServic
 
     if (err == DeserializationError::Ok)
     {
-        utlityServices.printLine(" Read JSON Data From File ");
+        utilServices.printLine(" Read JSON Data From File ");
         serializeJsonPretty(infojson1, Serial);
         serializeJsonPretty(infojson1, infojson);
         return true;

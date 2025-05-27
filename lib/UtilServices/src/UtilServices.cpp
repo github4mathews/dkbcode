@@ -1,6 +1,6 @@
-#include "utlityServices.h"
+#include "UtilServices.h"
 
-void UtlityServices::printLine(String message)
+void UtilServices::printLine(String message)
 {
     Serial.println();
     printDash(10);
@@ -11,16 +11,16 @@ void UtlityServices::printLine(String message)
     Serial.println();
 }
 
-void UtlityServices::printDash(int count)
+void UtilServices::printDash(int count)
 {
     for (size_t i = 0; i < (size_t)count; i++)
         Serial.print("=");
 }
 
-void UtlityServices::printInitializingDebug(String reciverListAsString,
-                                            bool peerAdded,
-                                            uint8_t broadcastAddress[6],
-                                            int WorkingMode)
+void UtilServices::printInitializingDebug(String reciverListAsString,
+                                          bool peerAdded,
+                                          uint8_t broadcastAddress[6],
+                                          int WorkingMode)
 {
     DynamicJsonDocument doc(1024);
     deserializeJson(doc, reciverListAsString);
@@ -51,7 +51,7 @@ void UtlityServices::printInitializingDebug(String reciverListAsString,
     printLine(" END Initializing Debug ");
 }
 
-void UtlityServices::printOutgoingMessage(String outgoingJSON)
+void UtilServices::printOutgoingMessage(String outgoingJSON)
 {
     DynamicJsonDocument outgoingJSON_(1024);
     deserializeJson(outgoingJSON_, outgoingJSON);

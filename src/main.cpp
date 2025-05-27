@@ -5,10 +5,9 @@ bool EnableDebug = true;
 #include <ArduinoJson.h>
 #include <EEPROM.h>
 #include <String.h>
-#include <FS.h>
-#include <spiffsServices.h>
-#include <utlityServices.h>
-#include <StringHandlingServices.h>
+#include <Services.h>
+#include <UtilServices.h>
+#include <StrHandlingServices.h>
 #include <iostream>
 #include <SoftwareSerial.h>
 #include <esp_now.h>
@@ -19,10 +18,22 @@ bool EnableDebug = true;
 #include <ESPAsyncWebServer.h>
 #include <ESPmDNS.h>
 #include <AsyncTCP.h>
-#include <SPIFFS.h>
 #include <Update.h>
 #include <esp32/spiram.h>
+#include "FS.h"
+// #include "SPIFFS.h"
+#include "LittleFS.h"
 
+#define SPIFFS LittleFS
+
+/* This examples uses "quick re-define" of SPIFFS to run
+   an existing sketch with LittleFS instead of SPIFFS
+
+   You only need to format LittleFS the first time you run a
+   test or else use the LittleFS plugin to create a partition
+   https://github.com/lorol/arduino-esp32littlefs-plugin */
+
+#define FORMAT_LITTLEFS_IF_FAILED true
 using namespace std;
 
 int wifiChannel = 10;
@@ -34,9 +45,9 @@ AsyncWebServer server(80);
 AsyncEventSource events("/events");
 unsigned long lastEvent = 0;
 
-SpiffsServices spiffsService = SpiffsServices();
-UtlityServices utlityService = UtlityServices();
-StringHandlingServices stringHandlingService = StringHandlingServices();
+Services service = Services();
+UtilServices utilServices = UtilServices();
+StrHandlingServices stringHandlingService = StrHandlingServices();
 
 JsonDocument infojson;
 
@@ -75,6 +86,7 @@ bool isValidPath(const String &filename)
 bool loadKnownWifi(JsonArray &knownArr, String &currentSSID, String &currentPWD)
 {
   File file = SPIFFS.open("/info.json", "r");
+
   if (!file)
     return false;
   DynamicJsonDocument doc(2048);
@@ -646,11 +658,12 @@ void HandleWeb()
         request->send(400, "application/json", "{\"status\":\"fail_parse\"}");
         return;
       }
-        File file = SPIFFS.open("/info.json", "r");
-        if (!file) {
-            request->send(500, "application/json", "{\"status\":\"fail_open\"}");
-            return;
-        }
+      File file = SPIFFS.open("/info.json", "r");
+      if (!file)
+      {
+        request->send(500, "application/json", "{\"status\":\"fail_open\"}");
+        return;
+      }
         DynamicJsonDocument doc(8192);
         DeserializationError err2 = deserializeJson(doc, file);
         file.close();
@@ -701,11 +714,11 @@ void HandleWeb()
   // //     return;
   // // }
   // // String filename = request->getParam("name")->value();
-  // // if (!SPIFFS.exists(filename)) {
+  // // if (!LITTLEFS.exists(filename)) {
   // //     request->send(404, "text/plain", "File not found");
   // //     return;
   // // }
-  // // request->send(SPIFFS, filename, "application/octet-stream", true); });
+  // // request->send(LITTLEFS, filename, "application/octet-stream", true); });
   // server.on("/file", HTTP_GET, [](AsyncWebServerRequest *request)
   //           {
   //   if (!request->hasParam("name")) {
@@ -787,9 +800,10 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file name");
         return;
     }
-    if (!SPIFFS.exists(filename)) {
-        request->send(404, "text/plain", "File not found");
-        return;
+    if (!SPIFFS.exists(filename))
+    {
+      request->send(404, "text/plain", "File not found");
+      return;
     }
     request->send(SPIFFS, filename, "application/octet-stream", true); });
 
@@ -806,14 +820,18 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file name");
         return;
     }
-    if (!SPIFFS.exists(filename)) {
-        request->send(404, "text/plain", "File/folder not found");
-        return;
+    if (!SPIFFS.exists(filename))
+    {
+      request->send(404, "text/plain", "File/folder not found");
+      return;
     }
-    if (SPIFFS.remove(filename)) {
-        request->send(200, "text/plain", "Deleted");
-    } else {
-        request->send(500, "text/plain", "Delete failed");
+    if (SPIFFS.remove(filename))
+    {
+      request->send(200, "text/plain", "Deleted");
+    }
+    else
+    {
+      request->send(500, "text/plain", "Delete failed");
     } });
 
   // Upload file
@@ -869,14 +887,18 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file/folder name");
         return;
     }
-    if (!SPIFFS.exists(oldName)) {
-        request->send(404, "text/plain", "Old file/folder not found");
-        return;
+    if (!SPIFFS.exists(oldName))
+    {
+      request->send(404, "text/plain", "Old file/folder not found");
+      return;
     }
-    if (SPIFFS.rename(oldName, newName)) {
-        request->send(200, "text/plain", "Renamed");
-    } else {
-        request->send(500, "text/plain", "Rename failed");
+    if (SPIFFS.rename(oldName, newName))
+    {
+      request->send(200, "text/plain", "Renamed");
+    }
+    else
+    {
+      request->send(500, "text/plain", "Rename failed");
     } });
 
   // Get file content for editing
@@ -892,9 +914,10 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file name");
         return;
     }
-    if (!SPIFFS.exists(filename)) {
-        request->send(404, "text/plain", "File not found");
-        return;
+    if (!SPIFFS.exists(filename))
+    {
+      request->send(404, "text/plain", "File not found");
+      return;
     }
     File file = SPIFFS.open(filename, "r");
     String content = file.readString();
@@ -981,16 +1004,16 @@ void setup()
 {
   Serial.begin(115200);
 
-  if (!SPIFFS.begin())
+  if (!SPIFFS.begin(FORMAT_LITTLEFS_IF_FAILED))
   {
     if (EnableDebug)
-      Serial.println("An Error has occurred while mounting SPIFFS");
+      Serial.println("An Error has occurred while mounting LITTLEFS");
     return;
   }
   else
   {
     String infojson1;
-    spiffsService.getDeviceData(infojson1, utlityService, "/info.json");
+    service.getDeviceData(infojson1, utilServices, "/info.json");
     DeserializationError err = deserializeJson(infojson, infojson1);
     Serial.println(infojson1);
 

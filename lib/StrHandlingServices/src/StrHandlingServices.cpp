@@ -1,6 +1,6 @@
-#include "stringHandlingServices.h"
+#include "strHandlingServices.h"
 
-void StringHandlingServices::str_replace(char *src, char *oldchars, char *newchars)
+void StrHandlingServices::str_replace(char *src, char *oldchars, char *newchars)
 {
     int MAX_STRING_LENGTH = 100;
     char *p = strstr(src, oldchars);
@@ -27,7 +27,7 @@ void StringHandlingServices::str_replace(char *src, char *oldchars, char *newcha
     } while (p && (p = strstr(src, oldchars)));
 }
 
-int StringHandlingServices::StringSplit(String sInput, char cDelim, String sParams[], int iMaxParams)
+int StrHandlingServices::StringSplit(String sInput, char cDelim, String sParams[], int iMaxParams)
 {
     int iParamCount = 0;
     int iPosDelim, iPosStart = 0;
