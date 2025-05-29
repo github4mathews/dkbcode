@@ -1,1 +1,1 @@
-[View the formatted README](README.html)
+[View the formatted README](index.html)
