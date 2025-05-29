@@ -1,5 +1,6 @@
 DKBCode - Open-Source Embedded System for Engineering Education
-[View the formatted README]([text](https://github4mathews.github.io/dkbcode/))
+
+[View the formatted README]((https://github4mathews.github.io/dkbcode/))
 
 
 🌍 DKBCode is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
