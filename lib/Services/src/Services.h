@@ -11,11 +11,11 @@ using namespace std;
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <WiFi.h>
-#include "FS.h"
+// #include "FS.h"
 // #include "SPIFFS.h"
-#include "LittleFS.h"
+#include <LittleFS.h>
 
-#define SPIFFS LittleFS
+// #define SPIFFS LittleFS
 
 /* This examples uses "quick re-define" of SPIFFS to run
    an existing sketch with LittleFS instead of SPIFFS
@@ -24,7 +24,7 @@ using namespace std;
    test or else use the LittleFS plugin to create a partition
    https://github.com/lorol/arduino-esp32littlefs-plugin */
 
-#define FORMAT_LITTLEFS_IF_FAILED true
+// #define FORMAT_LITTLEFS_IF_FAILED true
 
 class Services
 {

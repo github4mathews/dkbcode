@@ -1,17 +1,17 @@
 #define ARDUINOJSON_ENABLE_COMMENTS 1
-bool EnableDebug = true;
+#define DEBUG
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <EEPROM.h>
-#include <String.h>
+// #include <EEPROM.h>
+// #include <String.h>
 #include <Services.h>
 #include <UtilServices.h>
 #include <StrHandlingServices.h>
-#include <iostream>
-#include <SoftwareSerial.h>
-#include <esp_now.h>
-#include <esp_wifi.h>
+// #include <iostream>
+// #include <SoftwareSerial.h>
+// #include <esp_now.h>
+// #include <esp_wifi.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
@@ -20,20 +20,20 @@ bool EnableDebug = true;
 #include <AsyncTCP.h>
 #include <Update.h>
 #include <esp32/spiram.h>
-#include "FS.h"
-// #include "SPIFFS.h"
-#include "LittleFS.h"
+// #include "FS.h"
+// #include "LittleFS.h"
+#include <LittleFS.h> // Ensure you're using LittleFS, not LittleFS
 
-#define SPIFFS LittleFS
+// #define LittleFS LittleFS
 
-/* This examples uses "quick re-define" of SPIFFS to run
-   an existing sketch with LittleFS instead of SPIFFS
+/* This examples uses "quick re-define" of LittleFS to run
+   an existing sketch with LittleFS instead of LittleFS
 
    You only need to format LittleFS the first time you run a
    test or else use the LittleFS plugin to create a partition
    https://github.com/lorol/arduino-esp32littlefs-plugin */
 
-#define FORMAT_LITTLEFS_IF_FAILED true
+// #define FORMAT_LITTLEFS_IF_FAILED true
 using namespace std;
 
 int wifiChannel = 10;
@@ -63,7 +63,7 @@ const char *SENSOR = "sensor";
 
 // Global variable to track scan status
 int wifiScanStatus = -1;
-DynamicJsonDocument wifiScanResults(2048);
+DynamicJsonDocument wifiScanResults(1024);
 
 void notFound(AsyncWebServerRequest *request);
 void HandleWeb();
@@ -85,11 +85,11 @@ bool isValidPath(const String &filename)
 // Helper: Load known Wi-Fi from info.json
 bool loadKnownWifi(JsonArray &knownArr, String &currentSSID, String &currentPWD)
 {
-  File file = SPIFFS.open("/info.json", "r");
+  File file = LittleFS.open("/info.json", "r");
 
   if (!file)
     return false;
-  DynamicJsonDocument doc(2048);
+  DynamicJsonDocument doc(1024);
   DeserializationError err = deserializeJson(doc, file);
   file.close();
   if (err)
@@ -119,30 +119,30 @@ bool loadKnownWifi(JsonArray &knownArr, String &currentSSID, String &currentPWD)
 // Helper: Save current Wi-Fi to info.json
 void saveCurrentWifi(const String &ssid, const String &pwd)
 {
-  File file = SPIFFS.open("/info.json", "r");
+  File file = LittleFS.open("/info.json", "r");
   if (!file)
     return;
-  DynamicJsonDocument doc(2048);
+  DynamicJsonDocument doc(1024);
   DeserializationError err = deserializeJson(doc, file);
   file.close();
   if (err)
     return;
   doc["WIFI"]["CURRENT"]["SSID"] = ssid;
   doc["WIFI"]["CURRENT"]["PWD"] = pwd;
-  file = SPIFFS.open("/info.json", "w");
+  file = LittleFS.open("/info.json", "w");
   serializeJson(doc, file);
   file.close();
 }
 
 void autoConnectKnownWifi()
 {
-  File file = SPIFFS.open("/info.json", "r");
+  File file = LittleFS.open("/info.json", "r");
   if (!file)
   {
     Serial.println("Failed to open info.json");
     return;
   }
-  DynamicJsonDocument doc(4096);
+  DynamicJsonDocument doc(1024);
   DeserializationError err = deserializeJson(doc, file);
   file.close();
   if (err)
@@ -200,17 +200,17 @@ void autoConnectKnownWifi()
     if (WiFi.status() == WL_CONNECTED)
     {
       // Save CURRENT
-      File fileW = SPIFFS.open("/info.json", "r");
+      File fileW = LittleFS.open("/info.json", "r");
       if (!fileW)
         return;
-      DynamicJsonDocument docW(4096);
+      DynamicJsonDocument docW(1024);
       DeserializationError errW = deserializeJson(docW, fileW);
       fileW.close();
       if (errW)
         return;
       docW["WIFI"]["CURRENT"]["SSID"] = bestSSID;
       docW["WIFI"]["CURRENT"]["PWD"] = bestPWD;
-      fileW = SPIFFS.open("/info.json", "w");
+      fileW = LittleFS.open("/info.json", "w");
       serializeJson(docW, fileW);
       fileW.close();
 
@@ -327,7 +327,7 @@ String getParameter(AsyncWebServerRequest *request)
 
 bool loadUsers(JsonDocument &doc, JsonArray &users)
 {
-  File file = SPIFFS.open("/info.json", "r");
+  File file = LittleFS.open("/info.json", "r");
   if (!file)
     return false;
   DeserializationError err = deserializeJson(doc, file);
@@ -345,7 +345,7 @@ bool loadUsers(JsonDocument &doc, JsonArray &users)
 // Helper: Save users array to info.json
 bool saveUsers(JsonDocument &doc)
 {
-  File file = SPIFFS.open("/info.json", "w");
+  File file = LittleFS.open("/info.json", "w");
   if (!file)
     return false;
   serializeJson(doc, file);
@@ -357,32 +357,32 @@ void HandleWeb()
 {
   // Serve dashboard HTML
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/index.html", "text/html"); });
+            { request->send(LittleFS, "/index.html", "text/html"); });
   server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/index.html", "text/html"); });
+            { request->send(LittleFS, "/index.html", "text/html"); });
   server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/favicon.ico", "image/x-icon"); });
+            { request->send(LittleFS, "/favicon.ico", "image/x-icon"); });
   server.on("/folder-icon.png", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/folder-icon.png", "image/x-icon"); });
+            { request->send(LittleFS, "/folder-icon.png", "image/x-icon"); });
   server.on("/file-icon.png", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/file-icon.png", "image/x-icon"); });
+            { request->send(LittleFS, "/file-icon.png", "image/x-icon"); });
   server.on("/login.html", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/login.html", "text/html"); });
+            { request->send(LittleFS, "/login.html", "text/html"); });
   server.on("/styles.css", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/styles.css", "text/css"); });
+            { request->send(LittleFS, "/styles.css", "text/css"); });
   // Serve JS
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/script.js", "text/javascript"); });
+            { request->send(LittleFS, "/script.js", "text/javascript"); });
   server.on("/logo.svg", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/logo.svg", "image/svg+xml"); });
+            { request->send(LittleFS, "/logo.svg", "image/svg+xml"); });
   server.on("/profile.png", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/profile.png", "image/png"); });
+            { request->send(LittleFS, "/profile.png", "image/png"); });
   server.on("/fmstyles.css", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/fmstyles.css", "text/css"); });
+            { request->send(LittleFS, "/fmstyles.css", "text/css"); });
   server.on("/fmscript.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/fmscript.js", "text/javascript"); });
+            { request->send(LittleFS, "/fmscript.js", "text/javascript"); });
   server.on("/filemanager.html", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/filemanager.html", "text/html"); });
+            { request->send(LittleFS, "/filemanager.html", "text/html"); });
 
   // SSE endpoint
   events.onConnect([](AsyncEventSourceClient *client)
@@ -395,7 +395,7 @@ void HandleWeb()
       if (request->hasParam("username", true) && request->hasParam("password", true)) {
           String username = request->getParam("username", true)->value();
           String password = request->getParam("password", true)->value();
-          DynamicJsonDocument doc(8192);
+          DynamicJsonDocument doc(1024);
           JsonArray users;
           if (!loadUsers(doc, users)) {
               request->send(500, "application/json", "{\"status\":\"fail_load\"}");
@@ -422,7 +422,7 @@ void HandleWeb()
   // READ all users
   server.on("/users", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-      DynamicJsonDocument doc(8192);
+      DynamicJsonDocument doc(1024);
       JsonArray users;
       if (!loadUsers(doc, users)) {
           request->send(500, "application/json", "{\"status\":\"fail_load\"}");
@@ -438,7 +438,7 @@ void HandleWeb()
       if (request->hasParam("username", true) && request->hasParam("password", true)) {
           String username = request->getParam("username", true)->value();
           String password = request->getParam("password", true)->value();
-          DynamicJsonDocument doc(8192);
+          DynamicJsonDocument doc(1024);
           JsonArray users;
           if (!loadUsers(doc, users)) {
               request->send(500, "application/json", "{\"status\":\"fail_load\"}");
@@ -470,7 +470,7 @@ void HandleWeb()
             {
       if (request->hasParam("username", true)) {
           String username = request->getParam("username", true)->value();
-          DynamicJsonDocument doc(8192);
+          DynamicJsonDocument doc(1024);
           JsonArray users;
           if (!loadUsers(doc, users)) {
               request->send(500, "application/json", "{\"status\":\"fail_load\"}");
@@ -536,12 +536,12 @@ void HandleWeb()
 
         Serial.println((String) "Saving Wi-Fi credentials: SSID: " + ssid + ", Password: " + password);
 
-        File file = SPIFFS.open("/info.json", "r");
+        File file = LittleFS.open("/info.json", "r");
         if (!file) {
             request->send(500, "application/json", "{\"status\":\"fail_open\"}");
             return;
         }
-        DynamicJsonDocument doc(2048);
+        DynamicJsonDocument doc(1024);
         DeserializationError err = deserializeJson(doc, file);
         file.close();
         if (err) {
@@ -568,7 +568,7 @@ void HandleWeb()
         doc["WIFI"]["CURRENT"]["SSID"] = ssid;
         doc["WIFI"]["CURRENT"]["PWD"] = password;
 
-        file = SPIFFS.open("/info.json", "w");
+        file = LittleFS.open("/info.json", "w");
         serializeJson(doc, file);
         file.close();
         request->send(200, "application/json", "{\"status\":\"success\"}");
@@ -578,12 +578,12 @@ void HandleWeb()
 
   server.on("/wifi/known", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-      File file = SPIFFS.open("/info.json", "r");
+      File file = LittleFS.open("/info.json", "r");
       if (!file) {
           request->send(404, "application/json", "{\"error\":\"info.json not found\"}");
           return;
       }
-      DynamicJsonDocument doc(2048);
+      DynamicJsonDocument doc(1024);
       DeserializationError err = deserializeJson(doc, file);
       file.close();
       if (err) {
@@ -597,11 +597,11 @@ void HandleWeb()
   // Serve info.json as JSON
   server.on("/wifi/info", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    if (!SPIFFS.exists("/info.json")) {
+    if (!LittleFS.exists("/info.json")) {
         request->send(404, "application/json", "{\"error\":\"info.json not found\"}");
         return;
     }
-    File file = SPIFFS.open("/info.json", "r");
+    File file = LittleFS.open("/info.json", "r");
     if (!file) {
         request->send(500, "application/json", "{\"error\":\"fail_open\"}");
         return;
@@ -623,12 +623,12 @@ void HandleWeb()
   // GET current MQTT info
   server.on("/mqtt/info", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-  File file = SPIFFS.open("/info.json", "r");
+  File file = LittleFS.open("/info.json", "r");
   if (!file) {
       request->send(404, "application/json", "{\"error\":\"info.json not found\"}");
       return;
   }
-  DynamicJsonDocument doc(4096);
+  DynamicJsonDocument doc(1024);
   DeserializationError err = deserializeJson(doc, file);
   file.close();
   if (err) {
@@ -651,26 +651,27 @@ void HandleWeb()
     body += String((const char*)data, len);
     if (index + len == total) { // All data received
       Serial.println(body);
-      DynamicJsonDocument input(4096);
+      DynamicJsonDocument input(1024);
       DeserializationError err = deserializeJson(input, body);
       if (err)
       {
         request->send(400, "application/json", "{\"status\":\"fail_parse\"}");
         return;
       }
-      File file = SPIFFS.open("/info.json", "r");
+      File file = LittleFS.open("/info.json", "r");
       if (!file)
       {
         request->send(500, "application/json", "{\"status\":\"fail_open\"}");
         return;
       }
-        DynamicJsonDocument doc(8192);
-        DeserializationError err2 = deserializeJson(doc, file);
-        file.close();
-        if (err2) {
-            request->send(500, "application/json", "{\"status\":\"fail_parse2\"}");
-            return;
-        }
+      DynamicJsonDocument doc(1024);
+      DeserializationError err2 = deserializeJson(doc, file);
+      file.close();
+      if (err2)
+      {
+        request->send(500, "application/json", "{\"status\":\"fail_parse2\"}");
+        return;
+      }
         JsonObject mqtt = doc["MQTT"];
         mqtt["MQTT_SERVER"] = input["server"] | "";
         mqtt["DEFAULT_USERNAME"] = input["username"] | "";
@@ -682,7 +683,7 @@ void HandleWeb()
         mqtt["SUBSCRIBE_TOPIC"] = input["subscribeTopic"].isNull() ? JsonArray() : input["subscribeTopic"];
         mqtt["SERVER_CERTIFICATE"] = input["serverCert"] | "";
 
-        file = SPIFFS.open("/info.json", "w");
+        file = LittleFS.open("/info.json", "w");
         serializeJson(doc, file);
         file.close();
         request->send(200, "application/json", "{\"status\":\"success\"}");
@@ -692,7 +693,7 @@ void HandleWeb()
   // server.on("/file/list", HTTP_GET, [](AsyncWebServerRequest *request)
   //           {
   // String output = "[";
-  // File root = SPIFFS.open("/");
+  // File root = LittleFS.open("/");
   // File file = root.openNextFile();
   // bool first = true;
   // while(file){
@@ -728,12 +729,12 @@ void HandleWeb()
   //   String filename = request->getParam("name")->value();
   //   if (!filename.startsWith("/")) filename = "/" + filename;
   //   Serial.print("Requested file: "); Serial.println(filename);
-  //   if (!SPIFFS.exists(filename)) {
-  //       Serial.println("File not found in SPIFFS!");
+  //   if (!LittleFS.exists(filename)) {
+  //       Serial.println("File not found in LittleFS!");
   //       request->send(404, "text/plain", "File not found");
   //       return;
   //   }
-  //   request->send(SPIFFS, filename, "application/octet-stream", true); });
+  //   request->send(LittleFS, filename, "application/octet-stream", true); });
 
   // // Delete file
   // server.on("/file", HTTP_DELETE, [](AsyncWebServerRequest *request)
@@ -743,11 +744,11 @@ void HandleWeb()
   //     return;
   // }
   // String filename = request->getParam("name")->value();
-  // if (!SPIFFS.exists(filename)) {
+  // if (!LittleFS.exists(filename)) {
   //     request->send(404, "text/plain", "File not found");
   //     return;
   // }
-  // SPIFFS.remove(filename);
+  // LittleFS.remove(filename);
   // request->send(200, "text/plain", "File deleted"); });
 
   // // Upload file (POST, multipart/form-data)
@@ -756,7 +757,7 @@ void HandleWeb()
   //           {
   // static File uploadFile;
   // if(index == 0){
-  //     uploadFile = SPIFFS.open("/" + filename, "w");
+  //     uploadFile = LittleFS.open("/" + filename, "w");
   // }
   // if(uploadFile){
   //     uploadFile.write(data, len);
@@ -770,7 +771,7 @@ void HandleWeb()
   server.on("/file/list", HTTP_GET, [](AsyncWebServerRequest *request)
             {
   String output = "[";
-  File root = SPIFFS.open("/");
+  File root = LittleFS.open("/");
   File file = root.openNextFile();
   bool first = true;
   while (file) {
@@ -800,12 +801,12 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file name");
         return;
     }
-    if (!SPIFFS.exists(filename))
+    if (!LittleFS.exists(filename))
     {
       request->send(404, "text/plain", "File not found");
       return;
     }
-    request->send(SPIFFS, filename, "application/octet-stream", true); });
+    request->send(LittleFS, filename, "application/octet-stream", true); });
 
   // Delete file/folder
   server.on("/file", HTTP_DELETE, [](AsyncWebServerRequest *request)
@@ -820,12 +821,12 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file name");
         return;
     }
-    if (!SPIFFS.exists(filename))
+    if (!LittleFS.exists(filename))
     {
       request->send(404, "text/plain", "File/folder not found");
       return;
     }
-    if (SPIFFS.remove(filename))
+    if (LittleFS.remove(filename))
     {
       request->send(200, "text/plain", "Deleted");
     }
@@ -842,7 +843,7 @@ void HandleWeb()
     if (index == 0) {
         if (!filename.startsWith("/")) filename = "/" + filename;
         if (!isValidPath(filename)) return;
-        uploadFile = SPIFFS.open(filename, "w");
+        uploadFile = LittleFS.open(filename, "w");
     }
     if (uploadFile) {
         uploadFile.write(data, len);
@@ -864,7 +865,7 @@ void HandleWeb()
   }
   // Simulate folder creation by creating a placeholder file
   String placeholderFile = "/" + folderName + "/.placeholder";
-  File file = SPIFFS.open(placeholderFile, "w");
+  File file = LittleFS.open(placeholderFile, "w");
   if (!file) {
       request->send(500, "text/plain", "Failed to create folder");
       return;
@@ -887,12 +888,12 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file/folder name");
         return;
     }
-    if (!SPIFFS.exists(oldName))
+    if (!LittleFS.exists(oldName))
     {
       request->send(404, "text/plain", "Old file/folder not found");
       return;
     }
-    if (SPIFFS.rename(oldName, newName))
+    if (LittleFS.rename(oldName, newName))
     {
       request->send(200, "text/plain", "Renamed");
     }
@@ -914,12 +915,12 @@ void HandleWeb()
         request->send(400, "text/plain", "Invalid file name");
         return;
     }
-    if (!SPIFFS.exists(filename))
+    if (!LittleFS.exists(filename))
     {
       request->send(404, "text/plain", "File not found");
       return;
     }
-    File file = SPIFFS.open(filename, "r");
+    File file = LittleFS.open(filename, "r");
     String content = file.readString();
     file.close();
     request->send(200, "text/plain", content); });
@@ -944,7 +945,7 @@ void HandleWeb()
           String filename = request->getParam("name", true)->value();
           if (!filename.startsWith("/")) filename = "/" + filename;
           if (!isValidPath(filename)) return;
-          editFile = SPIFFS.open(filename, "w");
+          editFile = LittleFS.open(filename, "w");
           if (!editFile) {
               request->send(500, "text/plain", "Failed to open file for editing");
               return;
@@ -1004,11 +1005,12 @@ void setup()
 {
   Serial.begin(115200);
 
-  if (!SPIFFS.begin(FORMAT_LITTLEFS_IF_FAILED))
+  // LittleFS.format();
+  if (!LittleFS.begin(true))
   {
-    if (EnableDebug)
-      Serial.println("An Error has occurred while mounting LITTLEFS");
-    return;
+#ifdef DEBUG
+    Serial.println("An Error has occurred while mounting LITTLEFS");
+#endif
   }
   else
   {

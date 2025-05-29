@@ -8,7 +8,7 @@ void Services::ConfigFile_Save_Variable(String From, String VarName, String VarV
     Serial.print(VarValue);
     Serial.println();
 
-    File configFile = SPIFFS.open("/info.json", "r");
+    File configFile = LittleFS.open("/info.json", "r");
     if (!configFile)
     {
         Serial.println("- failed to open config file for writing");
@@ -31,7 +31,7 @@ void Services::ConfigFile_Save_Variable(String From, String VarName, String VarV
         else
             doc["ME"][VarName] = VarValue;
 
-        configFile = SPIFFS.open("/info.json", "w");
+        configFile = LittleFS.open("/info.json", "w");
         serializeJson(doc, configFile);
         utilServices.printLine(" NEW info.json ");
         serializeJsonPretty(doc, Serial);
@@ -69,7 +69,7 @@ bool Services::getDeviceData(String &infojson, UtilServices utilServices, String
     DynamicJsonDocument infojson1(1024);
 
     /****** Read info.json *******/
-    File info = SPIFFS.open(filePath, "r");
+    File info = LittleFS.open(filePath, "r");
     if (!info)
     {
         Serial.println("Failed to open info.json");
