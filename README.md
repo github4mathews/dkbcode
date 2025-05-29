@@ -1,4 +1,7 @@
 DKBCode - Open-Source Embedded System for Engineering Education
+[View the formatted README]([text](https://github4mathews.github.io/dkbcode/))
+
+
 🌍 DKBCode is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
 
 📌 Vision & Purpose
@@ -115,9 +118,3 @@ We welcome open-source contributors, educators, and industry professionals to im
 ✔ Share technical knowledge & tutorials to improve the learning experience.
 🔗 Let’s collaborate to make engineering education more interactive! 🚀🔥
 
-📌 How to Keep This Format?
-1️⃣ Save this file as README.md in your repository.
-2️⃣ GitHub automatically formats Markdown syntax (Headings, Lists, Tables, and Code Blocks).
-3️⃣ Whenever you update the project, keep using Markdown formatting for consistency.
-Would you like me to add technical documentation links or expand the installation guide further? ⚡🔥
-Let's make this GitHub README the best reference for your open-source development! 🚀🔥
