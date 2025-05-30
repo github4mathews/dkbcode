@@ -1,6 +1,6 @@
 **DKBBoard - Open-Source Embedded System for Engineering Education**
 
-[View the formatted README](https://github4mathews.github.io/DKBBoard/)
+[View the formatted README](https://github4mathews.github.io/dkbcode/)
 
 
 🌍 **DKBBoard** 
