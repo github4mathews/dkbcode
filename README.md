@@ -1,15 +1,15 @@
-**DKBCode - Open-Source Embedded System for Engineering Education**
+**DKBBoard - Open-Source Embedded System for Engineering Education**
 
-[View the formatted README](https://github4mathews.github.io/dkbcode/)
+[View the formatted README](https://github4mathews.github.io/DKBBoard/)
 
 
-🌍 **DKBCode** is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
+🌍 **DKBBoard** is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
 
 📌** Vision & Purpose**
  To create an educational and industry-ready embedded system that integrates multiple MCUs, real-time execution, and cloud connectivity, making it suitable for students, developers, and researchers.
 
-**Why DKBCode?**
-Modern engineering education often lacks affordable, interactive, and scalable learning tools that bridge theory with practical application. DKBCode is designed to:
+**Why DKBBoard?**
+Modern engineering education often lacks affordable, interactive, and scalable learning tools that bridge theory with practical application. DKBBoard is designed to:
 ✅ Enhance hands-on learning with real-world embedded programming examples.
 ✅ Provide a modular embedded framework for IoT, automation, and AI expansion.
 ✅ Create an accessible tool for students and educators in electronics and computer science.
@@ -34,21 +34,25 @@ Modern engineering education often lacks affordable, interactive, and scalable l
 - Expansion Ports – GPIOs, I2C, SPI, UART for additional module integration.
 
 💻 **Software Architecture**
+
 1️⃣ Embedded Firmware (ESP32 & GSM)
 - Multi-threaded execution using FreeRTOS for parallel sensor data processing.
 - Interrupt-driven response system for high-priority execution tasks.
 - Non-blocking communication protocols (MQTT/WebSockets/SMS).
 - Cloud API integration for remote dashboard updates & data logging.
+- 
 2️⃣ Web-Based Dashboard (HTML, CSS, JavaScript)
 - Dynamic sensor data streaming using Server-Sent Events (SSE) for real-time updates.
 - User-friendly UI for actuator control (motor, relay, lighting adjustments).
 - API-driven data handling between ESP32 and web interface.
 - Cross-platform compatibility (Desktop/Mobile-friendly).
+- 
 3️⃣ Cloud & Remote Access
 - Real-time data processing & storage via MQTT/WebSockets.
 - GSM fallback mechanism for remote operation in areas without Wi-Fi coverage.
 - Historical data analytics for tracking system usage trends.
-📡 Future Expansions:
+  
+📡 **Future Expansions:**
 ✔ AI-driven automation using edge computing & machine learning.
 ✔ Industrial integration with CAN/LIN communication protocols.
 
@@ -77,7 +81,6 @@ Multi-Layered Execution Flow
  │ - Stepper motors, PIR sensors, temperature modules           │
  └──────────────────────────────────────────────────────────────┘
 
-
 ✔ Ensures modularity and flexibility for future enhancements.
 ✔ Decouples software and hardware dependencies, improving scalability.
 
@@ -100,8 +103,8 @@ Multi-Layered Execution Flow
 🚀 **Getting Started**
 
 Step 1: Clone the Repository
-git clone https://github.com/github4mathews/dkbcode.git
-cd dkbcode
+git clone https://github.com/github4mathews/DKBBoard.git
+cd DKBBoard
 
 Step 2: Setup ESP32 & GSM
 ✔ Install dependencies (Arduino IDE, PlatformIO).
@@ -117,7 +120,7 @@ Step 4: Explore Features
 📖 Refer to the documentation in the repository for detailed usage!
 
 🌟 **How to Contribute?**
-We welcome open-source contributors, educators, and industry professionals to improve and expand DKBCode!
+We welcome open-source contributors, educators, and industry professionals to improve and expand DKBBoard!
 ✔ Fork the repo and submit improvements via pull requests.
 ✔ Report issues & suggest enhancements in the discussions section.
 ✔ Share technical knowledge & tutorials to improve the learning experience.
