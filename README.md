@@ -1,12 +1,14 @@
-DKBCode - Open-Source Embedded System for Engineering Education
+**DKBCode - Open-Source Embedded System for Engineering Education**
 
 [View the formatted README](https://github4mathews.github.io/dkbcode/)
 
 
-🌍 DKBCode is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
+🌍 **DKBCode** is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
 
-📌 Vision & Purpose
-Why DKBCode?
+📌** Vision & Purpose**
+ To create an educational and industry-ready embedded system that integrates multiple MCUs, real-time execution, and cloud connectivity, making it suitable for students, developers, and researchers.
+
+**Why DKBCode?**
 Modern engineering education often lacks affordable, interactive, and scalable learning tools that bridge theory with practical application. DKBCode is designed to:
 ✅ Enhance hands-on learning with real-world embedded programming examples.
 ✅ Provide a modular embedded framework for IoT, automation, and AI expansion.
@@ -14,7 +16,7 @@ Modern engineering education often lacks affordable, interactive, and scalable l
 ✅ Support open-source development, allowing contributors to refine and improve functionality.
 📡 This project is open to all engineers, DIY makers, and educational institutions looking to foster creativity and technical expertise through real-world applications.
 
-🔧 Hardware Architecture
+🔧 **Hardware Architecture**
 1️⃣ Core Processing Unit
 - ESP32 – High-performance microcontroller with Wi-Fi & Bluetooth support.
 - GSM Module (SIM800L) – Cellular communication for IoT applications, enabling SMS alerts & remote control.
@@ -31,7 +33,7 @@ Modern engineering education often lacks affordable, interactive, and scalable l
 - MQTT/WebSockets – Wireless cloud connectivity for remote operation.
 - Expansion Ports – GPIOs, I2C, SPI, UART for additional module integration.
 
-💻 Software Architecture
+💻 **Software Architecture**
 1️⃣ Embedded Firmware (ESP32 & GSM)
 - Multi-threaded execution using FreeRTOS for parallel sensor data processing.
 - Interrupt-driven response system for high-priority execution tasks.
@@ -50,29 +52,29 @@ Modern engineering education often lacks affordable, interactive, and scalable l
 ✔ AI-driven automation using edge computing & machine learning.
 ✔ Industrial integration with CAN/LIN communication protocols.
 
-📡 Detailed System Architecture
+📡 **Detailed System Architecture**
 Multi-Layered Execution Flow
-                      ┌──────────────────────┐
+                      ┌────────────────────────┐
                       │ Web Dashboard UI (GUI) │
-                      └──────────┬───────────┘
+                      └──────────┬─────────────┘
                                  │
       ┌─────────────────────────▼─────────────────────────┐
-      │  API Services (MQTT, WebSockets, GSM SMS)        │
-      │  Enables real-time IoT data exchange             │
+      │  API Services (MQTT, WebSockets, GSM SMS)         │
+      │  Enables real-time IoT data exchange              │
       └─────────────────────────┬─────────────────────────┘
                                  │
  ┌──────────────────────────────▼──────────────────────────────┐
- │ Firmware Layer (ESP32 & GSM)                                 │
+ │ Firmware Layer (ESP32 & GSM)                                │
  │ - Multi-sensor parallel processing (FreeRTOS)               │
  │ - Interrupt-based execution for motors & relays             │
  │ - Secure data communication (Wi-Fi, GSM, MQTT)              │
  └──────────────────────────────┬──────────────────────────────┘
                                  │
- ┌──────────────────────────────▼──────────────────────────────┐
- │ Hardware Layer (Microcontrollers, Sensors, Actuators)       │
- │ - ESP32 MCU for Wi-Fi & Bluetooth communication             │
- │ - GSM (SIM800L) for SMS & fallback connectivity             │
- │ - Stepper motors, PIR sensors, temperature modules          │
+ ┌──────────────────────────────▼───────────────────────────────┐
+ │ Hardware Layer (Microcontrollers, Sensors, Actuators)        │
+ │ - ESP32 MCU for Wi-Fi & Bluetooth communication              │
+ │ - GSM (SIM800L) for SMS & fallback connectivity              │
+ │ - Stepper motors, PIR sensors, temperature modules           │
  └──────────────────────────────────────────────────────────────┘
 
 
@@ -95,24 +97,26 @@ Multi-Layered Execution Flow
 ✅ Secure remote access with encryption.
 📡 Future Roadmap: AI-driven automation, industrial CAN/LIN integration.
 
-🚀 Getting Started
+🚀 **Getting Started**
+
 Step 1: Clone the Repository
 git clone https://github.com/github4mathews/dkbcode.git
 cd dkbcode
 
-
 Step 2: Setup ESP32 & GSM
 ✔ Install dependencies (Arduino IDE, PlatformIO).
 ✔ Configure Wi-Fi & MQTT in config.h.
+
 Step 3: Deploy Firmware & Web Interface
 ✔ Flash ESP32 with main.cpp firmware.
 ✔ Launch web dashboard (index.html).
+
 Step 4: Explore Features
 ✔ View real-time sensor updates.
 ✔ Control motors, relays via the web app.
 📖 Refer to the documentation in the repository for detailed usage!
 
-🌟 How to Contribute?
+🌟 **How to Contribute?**
 We welcome open-source contributors, educators, and industry professionals to improve and expand DKBCode!
 ✔ Fork the repo and submit improvements via pull requests.
 ✔ Report issues & suggest enhancements in the discussions section.
