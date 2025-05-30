@@ -3,17 +3,22 @@
 [View the formatted README](https://github4mathews.github.io/DKBBoard/)
 
 
-🌍 **DKBBoard** is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
+🌍 **DKBBoard** 
+
+is an open-source hardware and software ecosystem designed for students, educators, and engineers to learn IoT, embedded systems, and automation. This project provides a modular, scalable, and practical learning tool, enabling hands-on development with ESP32, GSM, real-time execution, and cloud integration.
 
 📌** Vision & Purpose**
+
  To create an educational and industry-ready embedded system that integrates multiple MCUs, real-time execution, and cloud connectivity, making it suitable for students, developers, and researchers.
 
 **Why DKBBoard?**
+
 Modern engineering education often lacks affordable, interactive, and scalable learning tools that bridge theory with practical application. DKBBoard is designed to:
 ✅ Enhance hands-on learning with real-world embedded programming examples.
 ✅ Provide a modular embedded framework for IoT, automation, and AI expansion.
 ✅ Create an accessible tool for students and educators in electronics and computer science.
 ✅ Support open-source development, allowing contributors to refine and improve functionality.
+
 📡 This project is open to all engineers, DIY makers, and educational institutions looking to foster creativity and technical expertise through real-world applications.
 
 🔧 **Hardware Architecture**
@@ -84,16 +89,19 @@ Multi-Layered Execution Flow
 ✔ Ensures modularity and flexibility for future enhancements.
 ✔ Decouples software and hardware dependencies, improving scalability.
 
-📖 Development Roadmap
+📖 **Development Roadmap**
+
 📅 Phase-Wise Implementation
 🔹 Phase 1: Core System Setup
 ✅ ESP32 & GSM firmware initialization.
 ✅ Multi-sensor integration using FreeRTOS.
 ✅ Wi-Fi & MQTT/WebSocket API setup.
+
 🔹 Phase 2: Web Dashboard Development
 ✅ Real-time SSE-based sensor data visualization.
 ✅ User-friendly UI design for controlling actuators.
 ✅ Mobile accessibility optimization.
+
 🔹 Phase 3: Cloud & IoT Expansion
 ✅ Implement historical logging & analytics.
 ✅ Expand GSM functionality (SMS-based automation).
@@ -120,6 +128,7 @@ Step 4: Explore Features
 📖 Refer to the documentation in the repository for detailed usage!
 
 🌟 **How to Contribute?**
+
 We welcome open-source contributors, educators, and industry professionals to improve and expand DKBBoard!
 ✔ Fork the repo and submit improvements via pull requests.
 ✔ Report issues & suggest enhancements in the discussions section.
